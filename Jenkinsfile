@@ -43,13 +43,22 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+    stage('SonarQube Analysis') {
+            environment {
+                // Récupération sécurisée du token SonarQube
+                SONAR_TOKEN = credentials('sonarqube-analysis')
+            }
             steps {
                 script {
-                    withSonarQubeEnv('SonarQube') {
-                        // Analyse SonarQube avec le profile spécifique
-                        sh "mvn sonar:sonar -P ${MAVEN_PROFILE}"
-                    }
+                    // Exécution de l'analyse SonarQube avec les paramètres spécifiés
+                    sh """
+                        mvn clean verify sonar:sonar \
+                            -Dsonar.projectKey=JenkinsPipeline \
+                            -Dsonar.projectName='JenkinsPipeline' \
+                            -Dsonar.host.url=http://localhost:9000/ \
+                            -Dsonar.token=${SONAR_TOKEN} \
+                            -P ${MAVEN_PROFILE}
+                    """
                 }
             }
         }
