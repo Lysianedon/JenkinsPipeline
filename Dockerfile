@@ -1,6 +1,6 @@
 # Étape 1: Build de l'application
-# Utilisation d'une image Maven avec JDK 8
-FROM maven:3.8-jdk-8 as builder
+# Utilisation d'une image Maven avec JDK 17
+FROM maven:3.9.6-eclipse-temurin-17 as builder
 
 # Définition du répertoire de travail
 WORKDIR /build
@@ -14,12 +14,11 @@ RUN mvn dependency:go-offline
 # Copie des sources
 COPY src src
 
-# Build de l'application avec le profile Pipeline-Test
+# Build de l'application
 RUN mvn package -DskipTests
 
 # Étape 2: Image finale
-# Utilisation d'une image JRE 8 minimale pour l'exécution
-FROM openjdk:8-jre-slim
+FROM eclipse-temurin:17-jre-jammy
 
 # Métadonnées de l'image
 LABEL maintainer="CasuleCorp" \
@@ -29,12 +28,13 @@ LABEL maintainer="CasuleCorp" \
 WORKDIR /app
 
 # Copie du JAR depuis l'étape de build
-COPY --from=builder /build/target/JenkinsPipeline-1.0.jar app.jar
+COPY --from=builder /build/target/*.jar app.jar
 
 # Port exposé par l'application
 EXPOSE 8080
 
-# Configuration des variables d'environnement Java
+# Variables d'environnement Java
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
 
+# Point d'entrée pour l'application
 ENTRYPOINT ["java", "-jar", "app.jar"]
