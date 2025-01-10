@@ -71,14 +71,6 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            when {
-                expression {
-                    return env.SONAR_TOKEN != null
-                }
-            }
-            environment {
-                SONAR_TOKEN = credentials('sonarqube-analysis')
-            }
             steps {
                 script {
                     try {
