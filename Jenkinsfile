@@ -3,7 +3,6 @@ pipeline {
 
     // Définition des outils nécessaires
     tools {
-        docker 'docker'
         maven 'M3' // Assurez-vous que Maven est configuré dans Jenkins
         git 'Default'  // Utilisation de l'installation Git par défaut
     }
