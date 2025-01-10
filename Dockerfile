@@ -15,7 +15,7 @@ RUN mvn dependency:go-offline
 COPY src src
 
 # Build de l'application avec le profile Pipeline-Test
-RUN mvn package -P Pipeline-Test -DskipTests
+RUN mvn package -DskipTests
 
 # Étape 2: Image finale
 # Utilisation d'une image JRE 8 minimale pour l'exécution
