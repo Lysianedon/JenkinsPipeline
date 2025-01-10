@@ -39,7 +39,7 @@ pipeline {
                 script {
                     try {
                         // Build Maven avec le profile Pipeline-Test
-                        sh "mvn clean package -P ${MAVEN_PROFILE}"
+                        sh "mvn clean package"
                         
                         // Build de l'image Docker
                         docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}", "-f Dockerfile .")
