@@ -143,7 +143,6 @@ pipeline {
     post {
         always {
             script {
-                // Nettoyage plus sûr
                 cleanWs()
                 sh 'docker system prune -f || true'
             }
